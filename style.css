@@ -1,0 +1,45 @@
+.center {
+  padding-left: calc(100% - 360px);
+  padding-right: calc(100% - 360px);
+}
+
+.container {
+  max-width: 320px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+  padding: 30px;
+  justify-content: center;
+  background-color: rgb(207, 245, 245);
+}
+
+.item {
+  grid-column: span 4;
+}
+
+.item1,
+.item2,
+.item5,
+.product {
+  grid-column: span 12;
+}
+
+.item3,
+.item4,
+.item6,
+.item7 {
+  grid-column: span 6;
+}
+
+.button {
+  margin: auto;
+  margin-top: 50px;
+  box-sizing: border-box;
+  width: 100px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}/*# sourceMappingURL=style.css.map */
