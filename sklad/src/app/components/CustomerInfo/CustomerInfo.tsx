@@ -1,36 +1,36 @@
 "use client";
-import { deleteSupplier, updateSupplier } from "@/app/api/suppliersApi";
-import { SupplierType } from "@/app/types/supplierTypes";
+import { deleteCustomer, updateCustomer } from "@/app/api/customersApi";
+import { CustomerType } from "@/app/types/customerType";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
 
 type Iprops = {
-  supplier: SupplierType;
+  customer: CustomerType;
 };
 
-export default function SupplierInfo({ supplier }: Iprops) {
+export default function CustomerInfo({ customer }: Iprops) {
   const router = useRouter();
-  const { supplier_id, supplier_name } = supplier;
-  const [name, setName] = useState(supplier_name);
+  const { customer_id, customer_name } = customer;
+  const [name, setName] = useState(customer_name);
 
-  if (!supplier_id) {
+  if (!customer_id) {
     return <h1>Данные отсутствуют</h1>;
   }
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const body = { supplier_id, supplier_name: name };
-    const data = await updateSupplier(body);
+    const body = { customer_id, customer_name: name };
+    const data = await updateCustomer(body);
     if (data) {
-      router.push("/basic_data/suppliers");
+      router.push("/basic_data/customers");
     }
   };
   const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const data = await deleteSupplier({ id: supplier_id });
+    const data = await deleteCustomer({ id: customer_id });
     if (data) {
-      router.push("/basic_data/suppliers");
+      router.push("/basic_data/customers");
     }
   };
 
@@ -53,11 +53,11 @@ export default function SupplierInfo({ supplier }: Iprops) {
           gap: "25px",
         }}
       >
-        <h1>Данные поставщика </h1>
-        <label> Код поставщика</label>
-        <input type="text" value={supplier_id} disabled />
+        <h1>Данные покупателя </h1>
+        <label> Код покупателя</label>
+        <input type="text" value={customer_id} disabled />
 
-        <label> Наименование поставщика</label>
+        <label> Наименование покупателя</label>
         <input
           type="text"
           value={name}
@@ -65,7 +65,8 @@ export default function SupplierInfo({ supplier }: Iprops) {
         />
         <button onClick={(e) => handleSubmit(e)}>Отправить</button>
         <button onClick={(e) => handleDelete(e)}>Удалить</button>
-        <Link href={'/basic_data/suppliers'}>Назад</Link>
+        <br/>
+        <Link href={'/basic_data/customers'}>Назад</Link>
       </form>
     </div>
   );

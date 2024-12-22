@@ -1,5 +1,5 @@
 "use client";
-import { createSupplier } from "@/app/api/suppliersApi";
+import { createCustomer } from "@/app/api/customersApi";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { MouseEvent, useState } from "react";
@@ -10,9 +10,9 @@ export default function Page() {
 
   const handleCreate = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const data = await createSupplier({ name });
+    const data = await createCustomer({ name });
     if (data) {
-      router.push("/basic_data/suppliers");
+      router.push("/basic_data/customers");
     }
   };
 
@@ -35,20 +35,16 @@ export default function Page() {
           gap: "25px",
         }}
       >
-        <h1>Создание поставщика </h1>
+        <h1>Создание покупателя </h1>
 
-        <label> Наименование поставщика</label>
+        <label> Наименование покупателя</label>
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <button onClick={(e) => handleCreate(e)}>Добавить</button>
-        <Link
-          href={"/basic_data/suppliers"}          
-        >
-          Назад
-        </Link>
+        <Link href={'/basic_data/customers'}>Назад</Link>
       </form>
     </div>
   );

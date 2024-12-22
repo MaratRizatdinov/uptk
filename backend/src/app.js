@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import pool from "./config/db.js";
 import supplierRouter from "./routes/supplier.routes.js";
+import customerRouter from "./routes/customer.routes.js";
+import productRouter from './routes/product.routes.js'
 import cors from "cors";
 
 dotenv.config();
@@ -13,6 +15,8 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api", supplierRouter);
+app.use("/api", customerRouter);
+app.use("/api", productRouter);
 
 pool.query("SELECT NOW()", (err, res) => {
   if (err) {
