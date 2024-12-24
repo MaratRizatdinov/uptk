@@ -7,5 +7,47 @@ class ProductController {
     );
     res.json(products.rows);
   }
+  async getOneProduct(req, res) {
+    const product_id = req.params.id;
+    const product = await pool.query(
+      `SELECT * FROM product WHERE product_id =$1`,
+      [product_id]
+    );
+    res.json(product.rows[0]);
+  }
+  async updateProduct(req, res) {
+    const {
+      product_id,
+      product_name,
+      product_category,
+      product_marking,
+      product_diameter,
+      product_length,
+      unit_of_measure,
+      weight_per_meter,
+    } = req.body;
+    const customer = await pool.query(
+      `UPDATE product SET 
+                product_name = $2,
+                product_category = $3,                
+                product_marking = $4,
+                product_diameter = $5,
+                product_length = $6,
+                unit_of_measure = $7,
+                weight_per_meter  = $8                     
+                WHERE product_id =$1 RETURNING *`,
+      [
+        product_id,
+        product_name,
+        product_category,
+        product_marking,
+        product_diameter,
+        product_length,
+        unit_of_measure,
+        weight_per_meter,
+      ]
+    );
+    res.json(customer.rows[0]);
+  }
 }
 export default new ProductController();
