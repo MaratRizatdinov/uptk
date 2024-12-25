@@ -9,16 +9,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 type Iprops = {
   product: ProductType;
 };
-type Inputs = {
-  product_id: number;
-  product_name: string;
-  product_category: string;
-  product_marking: string;
-  product_diameter: number;
-  product_length: number;
-  unit_of_measure: string;
-  weight_per_meter: number;
-};
+
 export default function ProductInfo({ product }: Iprops) {
   const router = useRouter();
 
@@ -26,12 +17,9 @@ export default function ProductInfo({ product }: Iprops) {
     return <h1>Данные отсутствуют</h1>;
   }
 
-  const { register, handleSubmit } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<ProductType>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    // const body = { supplier_id, supplier_name: name };
-    data.product_id = product.product_id;
-    // console.log(data.product_id);
+  const onSubmit: SubmitHandler<ProductType> = async (data) => {    
     const response = await updateProduct(data);
     if (response) {
       router.push("/basic_data/products");
@@ -41,7 +29,12 @@ export default function ProductInfo({ product }: Iprops) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label htmlFor="">Код продукта</label>
-      <input defaultValue={product.product_id} disabled /> <br />
+      <input
+        defaultValue={product.product_id}
+        {...register("product_id")}
+        disabled
+      />{" "}
+      <br />
       <label htmlFor="">Наименование продукта</label>
       <input
         defaultValue={product.product_name}

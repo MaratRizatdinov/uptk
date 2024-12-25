@@ -49,5 +49,42 @@ class ProductController {
     );
     res.json(customer.rows[0]);
   }
+  async createProduct(req, res) {
+    const {
+      product_name,
+      product_category,
+      product_marking,
+      product_diameter,
+      product_length,
+      unit_of_measure,
+      weight_per_meter,
+    } = req.body;
+
+    const newProduct = await pool.query(
+      `INSERT INTO product
+      (
+        product_name,
+        product_category,
+        product_marking,
+        product_diameter,
+        product_length,
+        unit_of_measure,
+        weight_per_meter
+      )
+        VALUES($1,$2,$3,$4,$5,$6,$7)
+        RETURNING *
+        `,
+      [
+        product_name,
+        product_category,
+        product_marking,
+        product_diameter,
+        product_length,
+        unit_of_measure,
+        weight_per_meter,
+      ]
+    );
+    res.json(newProduct.rows[0]);
+  }
 }
 export default new ProductController();

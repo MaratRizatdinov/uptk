@@ -38,7 +38,7 @@ export default async function ProductsPage() {
         </div>
         <br />
         <br />
-        {/* <Link href={"/basic_data/customers/create"}>Добавить покупателя</Link> */}
+        <Link href={"/basic_data/products/create"}>Добавить товар</Link>
         <br />
         <br />
         <Link href={"/basic_data"}>Назад</Link>
