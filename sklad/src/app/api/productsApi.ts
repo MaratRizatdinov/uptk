@@ -45,3 +45,13 @@ export async function createProduct(body: ProductTypeWithoutId) {
   }
   return res.json();
 }
+export async function deleteProduct({ id }: { id: number }) {
+  const res = await fetch(url + `/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) {
+    throw new Error("Ошибка при получении данных");
+  }
+  return res.json();
+}

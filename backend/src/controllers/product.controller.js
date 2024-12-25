@@ -86,5 +86,13 @@ class ProductController {
     );
     res.json(newProduct.rows[0]);
   }
+  async deleteProduct(req, res) {
+    const product_id = req.params.id;
+    const product = await pool.query(
+      `DELETE FROM product WHERE product_id =$1 RETURNING *`,
+      [product_id]
+    );
+    res.json(product.rows[0]);
+  }
 }
 export default new ProductController();

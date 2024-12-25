@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
 
-import { updateProduct } from "@/app/api/productsApi";
+import { deleteProduct, updateProduct } from "@/app/api/productsApi";
 import { ProductType } from "@/app/types/productTypes";
 import { useRouter } from "next/navigation";
+import { MouseEvent } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type Iprops = {
@@ -19,9 +20,16 @@ export default function ProductInfo({ product }: Iprops) {
 
   const { register, handleSubmit } = useForm<ProductType>();
 
-  const onSubmit: SubmitHandler<ProductType> = async (data) => {    
+  const onSubmit: SubmitHandler<ProductType> = async (data) => {
     const response = await updateProduct(data);
     if (response) {
+      router.push("/basic_data/products");
+    }
+  };
+  const handleDelete = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const data = await deleteProduct({ id: product.product_id });
+    if (data) {
       router.push("/basic_data/products");
     }
   };
@@ -78,6 +86,7 @@ export default function ProductInfo({ product }: Iprops) {
       />
       <br />
       <input type="submit" />
+      <button onClick={(e) => handleDelete(e)}>Удалить</button>
     </form>
   );
 }
