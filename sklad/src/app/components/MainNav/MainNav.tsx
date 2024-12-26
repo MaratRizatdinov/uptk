@@ -2,14 +2,12 @@ import Link from "next/link";
 import styles from "./MainNav.module.css";
 
 type Iprops = {
-  page: "main" | "basic";
+  page: "main" | "basic" | "docs";
 };
 
 export default async function MainNav({ page }: Iprops) {
   const mainList = [
-    { title: "Приход", to: "/arrival" },
-    { title: "Отгрузка", to: "/arrival" },
-    { title: "Перемещения", to: "/arrival" },
+    { title: "Документы", to: "/docs" },
     { title: "Отчеты", to: "/arrival" },
     { title: "Справочники", to: "/basic_data" },
   ];
@@ -20,8 +18,16 @@ export default async function MainNav({ page }: Iprops) {
     { title: "Склады", to: "/basic_data/warehouses" },
     { title: "На главную", to: "/" },
   ];
+  const docsList = [
+    { title: "Нач. остатки", to: "/arrival" },
+    { title: "Приход", to: "/arrival" },
+    { title: "Отгрузка", to: "/arrival" },
+    { title: "Перемещения", to: "/arrival" },
+    { title: "На главную", to: "/" },
+  ];
 
-  const renderList = page === "main" ? mainList : basicList;
+  const renderList =
+    page === "main" ? mainList : page === "basic" ? basicList : docsList;
 
   return (
     <div className={styles.container}>
