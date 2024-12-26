@@ -1,6 +1,6 @@
 "use client";
 import { ProductType } from "@/app/types/productTypes";
-import styles from "./ProductTable.module.css";
+import styles from "../Tables.module.css";
 import { useRouter } from "next/navigation";
 
 type Iprops = {

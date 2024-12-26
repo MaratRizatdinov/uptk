@@ -19,7 +19,7 @@ export default async function MainNav({ page }: Iprops) {
     { title: "На главную", to: "/" },
   ];
   const docsList = [
-    { title: "Нач. остатки", to: "/arrival" },
+    { title: "Нач. остатки", to: "/docs/init" },
     { title: "Приход", to: "/arrival" },
     { title: "Отгрузка", to: "/arrival" },
     { title: "Перемещения", to: "/arrival" },

@@ -1,5 +1,5 @@
 import { getProducts } from "@/app/api/productsApi";
-import ProductTable from "@/app/components/ProductTable/ProductTable";
+import ProductTable from "@/app/components/Tables/ProductTable/ProductTable";
 import { ProductType } from "@/app/types/productTypes";
 import Link from "next/link";
 
