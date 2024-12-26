@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import pool from "./config/db.js";
 import supplierRouter from "./routes/supplier.routes.js";
 import customerRouter from "./routes/customer.routes.js";
-import productRouter from './routes/product.routes.js'
+import productRouter from "./routes/product.routes.js";
+import warehouseRouter from "./routes/warehouse.routes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(cors());
 app.use("/api", supplierRouter);
 app.use("/api", customerRouter);
 app.use("/api", productRouter);
+app.use("/api", warehouseRouter);
 
 pool.query("SELECT NOW()", (err, res) => {
   if (err) {

@@ -16,7 +16,8 @@ export default async function MainNav({ page }: Iprops) {
   const basicList = [
     { title: "Поставщики", to: "/basic_data/suppliers" },
     { title: "Покупатели", to: "/basic_data/customers" },
-    { title: "Продукция", to: "/basic_data/products"},
+    { title: "Продукция", to: "/basic_data/products" },
+    { title: "Склады", to: "/basic_data/warehouses" },
     { title: "На главную", to: "/" },
   ];
 
