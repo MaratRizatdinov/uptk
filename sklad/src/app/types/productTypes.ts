@@ -18,3 +18,12 @@ export type ProductType = {
   unit_of_measure: string;
   weight_per_meter: number;
 };
+
+export type ProductItem = {
+  item_id: string;
+  product_id: number | undefined;
+  product_fuse: number | undefined;
+  product_code: number | undefined;
+  warehouse_id: number | undefined;
+  weight: number | undefined;
+};

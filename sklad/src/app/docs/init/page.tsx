@@ -7,11 +7,13 @@ export default async function InitPage() {
       init_doc_id: 1,
       init_date: new Date("2024-01-22"),
       init_doc_alias: "Init",
+      init_internal_num:10,
     },
     {
       init_doc_id: 2,
       init_date: new Date("2024-01-24"),
       init_doc_alias: "Init",
+      init_internal_num:11,
     },
   ];
   return (
