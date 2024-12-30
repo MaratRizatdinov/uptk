@@ -17,14 +17,16 @@ export default function InitDocsTable({ initDocs }: Iprops) {
         <tr>
           <th>Дата документа</th>
           <th>Номер документа</th>
+          <th>Вн.Номер документа</th>
           <th>Вид документа</th>
         </tr>
       </thead>
       <tbody>
         {initDocs.map((doc) => (
           <tr key={doc.init_doc_id} onClick={() => router.push(`/`)}>
-            <td>{format(initDocs[0].init_date, "dd/MM/yyyy hh:mm")}</td>
+            <td>{format(doc.init_date, "dd/MM/yyyy hh:mm")}</td>
             <td>{doc.init_doc_id}</td>
+            <td>{doc.init_internal_num}</td>
             <td>{doc.init_doc_alias}</td>
           </tr>
         ))}

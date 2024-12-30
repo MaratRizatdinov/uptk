@@ -1,5 +1,6 @@
 import pool from "../config/db.js";
 
+
 class WarehouseController {
   async createWarehouse(req, res) {
     const { warehouse_name } = req.body;
@@ -29,7 +30,7 @@ class WarehouseController {
   }
   async updateWarehouse(req, res) {
     const { warehouse_id, warehouse_name } = req.body;
-    const warehouse = await pool.query(
+    const warehouse = await pool.query(     
       `UPDATE warehouse SET warehouse_name =$1 WHERE warehouse_id =$2 RETURNING *`,
       [warehouse_name, warehouse_id]
     );

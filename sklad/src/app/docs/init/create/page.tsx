@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import ItemsTable from "@/app/components/Tables/ItemsTable/ItemsTable";
 import { ProductItem } from "@/app/types/productTypes";
 import { InitDoc } from "@/app/types/InitDocsType";
+import { createInitDoc } from "@/app/api/initDocApi";
 
 export default function CreateInitDoc() {
   const initDoc: InitDoc = {
@@ -34,6 +35,11 @@ export default function CreateInitDoc() {
     (acc, elem) => acc + (Number(elem.weight) || 0),
     0
   );
+
+  const handleSubmit = () => {
+    console.log(data);
+    createInitDoc(data).then((res) => console.log(res));
+  };
 
   return (
     <div className="container">
@@ -76,6 +82,8 @@ export default function CreateInitDoc() {
       <button onClick={() => console.log(data)}>
         Показать что в документе
       </button>
+      <br />
+      <button onClick={handleSubmit}>Записать</button>
     </div>
   );
 }

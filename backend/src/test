@@ -1,0 +1,301 @@
+Чтобы отправить запрос на добавление нескольких строк в таблицу PostgreSQL с использованием Node.js, можно использовать пакет `pg` (PostgreSQL client for Node.js). Этот пакет позволяет работать с PostgreSQL из JavaScript и Node.js.
+
+1. Установите пакет `pg`:
+
+```bash
+npm install pg
+```
+
+2. Пример кода для добавления нескольких строк в таблицу PostgreSQL:
+
+```javascript
+const { Client } = require('pg');
+
+// Подключение к базе данных PostgreSQL
+const client = new Client({
+  user: 'your_username', // ваш пользователь
+  host: 'localhost', // хост (или IP-адрес)
+  database: 'your_database', // имя базы данных
+  password: 'your_password', // ваш пароль
+  port: 5432, // порт PostgreSQL
+});
+
+client.connect()
+  .then(() => {
+    console.log('Подключение к базе данных успешно!');
+    
+    // Данные для добавления
+    const data = [
+      ['Alice', 25],
+      ['Bob', 30],
+      ['Charlie', 35],
+    ];
+
+    // Запрос на добавление нескольких строк
+    const query = `
+      INSERT INTO your_table_name (name, age)
+      VALUES 
+        ($1, $2),
+        ($3, $4),
+        ($5, $6)
+      `;
+
+    // Подготовка значений для подстановки в запрос
+    const values = data.flat(); // Сжимаем данные в одномерный массив
+
+    return client.query(query, values);
+  })
+  .then(() => {
+    console.log('Данные успешно добавлены!');
+  })
+  .catch(err => {
+    console.error('Ошибка при добавлении данных', err.stack);
+  })
+  .finally(() => {
+    client.end(); // Закрытие подключения
+  });
+```
+
+### Пояснения:
+
+- **`client.query(query, values)`**: Используется для выполнения SQL-запроса, где `query` — это сам SQL-запрос с параметризованными значениями (например, `$1`, `$2` и так далее), а `values` — массив значений, которые подставляются на соответствующие места в запросе.
+  
+- **`data.flat()`**: С помощью метода `flat()` данные превращаются в одномерный массив, подходящий для подстановки в запрос. Например, для данных `[['Alice', 25], ['Bob', 30], ['Charlie', 35]]` результат будет: `['Alice', 25, 'Bob', 30, 'Charlie', 35]`.
+
+### Примечания:
+- Убедитесь, что указали правильные параметры подключения (пользователь, пароль, хост, порт, название базы данных).
+- Обработайте возможные ошибки подключения и выполнения запросов.
+- В примере предполагается, что ваша таблица имеет два столбца: `name` (тип `TEXT`) и `age` (тип `INTEGER`).
+
+..........................
+
+Да, конечно, можно создать функцию, которая будет автоматически генерировать SQL-запрос для добавления нескольких строк на основе массива данных.
+
+Вот пример, как это можно сделать для добавления 30 строк, каждая из которых содержит 4 записи:
+
+1. Мы будем использовать функцию, которая принимает массив данных (массив строк), и динамически строит SQL-запрос.
+2. Для каждой строки данных будет автоматически генерироваться подставляемый запрос.
+
+Пример кода:
+
+```javascript
+const { Client } = require('pg');
+
+// Функция для создания запроса на добавление нескольких строк
+function createInsertQuery(tableName, columns, data) {
+  // Подготовка placeholders для значений
+  const values = [];
+  const valuePlaceholders = [];
+
+  // Генерация placeholders для каждого значения
+  data.forEach((row, rowIndex) => {
+    const rowPlaceholders = row.map((_, colIndex) => `$${rowIndex * columns.length + colIndex + 1}`);
+    valuePlaceholders.push(`(${rowPlaceholders.join(', ')})`);
+    values.push(...row);
+  });
+
+  // Формирование SQL-запроса
+  const query = `
+    INSERT INTO ${tableName} (${columns.join(', ')})
+    VALUES ${valuePlaceholders.join(', ')}
+  `;
+
+  return { query, values };
+}
+
+// Подключение к базе данных PostgreSQL
+const client = new Client({
+  user: 'your_username',
+  host: 'localhost',
+  database: 'your_database',
+  password: 'your_password',
+  port: 5432,
+});
+
+client.connect()
+  .then(() => {
+    console.log('Подключение к базе данных успешно!');
+
+    // Пример массива данных (30 строк, каждая строка с 4 значениями)
+    const data = Array.from({ length: 30 }, (_, i) => [
+      `name_${i + 1}`,
+      `email_${i + 1}@example.com`,
+      20 + i, // Пример возраста
+      new Date(), // Текущая дата
+    ]);
+
+    const columns = ['name', 'email', 'age', 'created_at'];
+    const { query, values } = createInsertQuery('users', columns, data); // users - это название таблицы
+
+    return client.query(query, values);
+  })
+  .then(() => {
+    console.log('Данные успешно добавлены!');
+  })
+  .catch(err => {
+    console.error('Ошибка при добавлении данных', err.stack);
+  })
+  .finally(() => {
+    client.end(); // Закрытие подключения
+  });
+```
+
+### Пояснение:
+
+1. **`createInsertQuery`** — эта функция принимает:
+   - `tableName` — название таблицы,
+   - `columns` — массив названий столбцов, в которые будут вставляться данные,
+   - `data` — массив строк, каждая из которых содержит 4 значения.
+
+2. Функция генерирует запрос с placeholders (`$1`, `$2`, `$3` и т.д.) для каждой строки и возвращает объект с готовым SQL-запросом и массивом значений.
+
+3. **Пример данных**: Мы создаем 30 строк, где каждая строка содержит 4 значения (например, `name`, `email`, `age`, `created_at`).
+
+4. **Массив `columns`** — это список столбцов, в которые будут вставляться значения.
+
+### Важные моменты:
+
+- **Безопасность**: Мы используем параметризацию с placeholders (`$1`, `$2` и т.д.), что предотвращает SQL-инъекции.
+- **Динамичность**: Эта функция может работать с любым количеством строк и столбцов. Просто передайте соответствующие данные в `columns` и `data`.
+  
+Такой подход позволит гибко добавлять множество строк в таблицу, используя один запрос.
+
+Напиши пожалуйста функцию для таких данных
+
+ Имя таблицы tableName ='product_item'
+ Колонки const columns = ['product_id', 'product_fuse', 'product_code'];
+
+Данные для добавления:
+
+ ProductItems = [
+    {
+        product_id: 1,
+        product_fuse: 2457856,
+        product_code: 123,
+    },
+    {
+        product_id: 1,
+        product_fuse: 2457856,
+        product_code: 125,
+    },
+ ]
+................
+
+Для такого случая, когда данные представляют собой массив объектов, и нужно выполнить вставку нескольких строк в таблицу, мы можем адаптировать функцию `createInsertQuery`, чтобы она принимала такие данные и корректно генерировала SQL-запрос.
+
+Вот пример функции, которая будет работать с вашим набором данных для добавления в таблицу `product_item`:
+
+```javascript
+const { Client } = require('pg');
+
+// Функция для создания запроса на добавление нескольких строк
+function createInsertQuery(tableName, columns, data) {
+  const values = [];
+  const valuePlaceholders = [];
+
+  // Генерация placeholders для каждого значения
+  data.forEach((row, rowIndex) => {
+    const rowPlaceholders = columns.map((_, colIndex) => `$${rowIndex * columns.length + colIndex + 1}`);
+    valuePlaceholders.push(`(${rowPlaceholders.join(', ')})`);
+    values.push(...columns.map(col => row[col]));
+  });
+
+  // Формирование SQL-запроса
+  const query = `
+    INSERT INTO ${tableName} (${columns.join(', ')})
+    VALUES ${valuePlaceholders.join(', ')}
+  `;
+
+  return { query, values };
+}
+
+// Подключение к базе данных PostgreSQL
+const client = new Client({
+  user: 'your_username', // Замените на ваш логин
+  host: 'localhost', // Хост базы данных
+  database: 'your_database', // Имя вашей базы данных
+  password: 'your_password', // Замените на ваш пароль
+  port: 5432, // Порт для подключения
+});
+
+client.connect()
+  .then(() => {
+    console.log('Подключение к базе данных успешно!');
+
+    // Массив данных для добавления
+    const productItems = [
+      {
+        product_id: 1,
+        product_fuse: 2457856,
+        product_code: 123,
+      },
+      {
+        product_id: 1,
+        product_fuse: 2457856,
+        product_code: 125,
+      },
+    ];
+
+    const columns = ['product_id', 'product_fuse', 'product_code'];
+    const { query, values } = createInsertQuery('product_item', columns, productItems);
+
+    return client.query(query, values);
+  })
+  .then(() => {
+    console.log('Данные успешно добавлены!');
+  })
+  .catch(err => {
+    console.error('Ошибка при добавлении данных', err.stack);
+  })
+  .finally(() => {
+    client.end(); // Закрытие подключения
+  });
+```
+
+### Объяснение:
+
+1. **Функция `createInsertQuery`**:
+   - Принимает три аргумента:
+     - `tableName` — название таблицы (в данном случае `'product_item'`),
+     - `columns` — массив имен столбцов (в вашем случае это `['product_id', 'product_fuse', 'product_code']`),
+     - `data` — массив объектов, который мы будем добавлять (в данном случае `productItems`).
+   
+2. **Как работает генерация запроса**:
+   - Для каждой строки из массива `data` мы формируем набор placeholders (например, `$1`, `$2`, `$3`), которые затем подставляются в SQL-запрос.
+   - В массив `values` мы добавляем все значения для всех строк, которые должны быть вставлены.
+   - Генерируется SQL-запрос с правильным количеством placeholders, а также формируется строка значений для каждой строки данных.
+
+3. **Подключение и выполнение запроса**:
+   - Создаем подключение к базе данных PostgreSQL с использованием клиента `pg`.
+   - Выполняем запрос с помощью `client.query(query, values)`, где `query` — это сформированный SQL-запрос, а `values` — это массив значений для подстановки в запрос.
+
+### Примечания:
+- **Безопасность**: Запрос использует параметризацию (`$1`, `$2`, `$3` и т.д.), что помогает избежать SQL-инъекций.
+- **Массив данных**: Вы можете передать любое количество объектов в массив `productItems`, и функция будет правильно генерировать запрос для вставки всех строк.
+
+### Пример работы:
+
+Если ваш массив `productItems` выглядит так:
+
+```javascript
+const productItems = [
+  { product_id: 1, product_fuse: 2457856, product_code: 123 },
+  { product_id: 1, product_fuse: 2457856, product_code: 125 },
+];
+```
+
+То запрос будет выглядеть примерно так:
+
+```sql
+INSERT INTO product_item (product_id, product_fuse, product_code)
+VALUES ($1, $2, $3), ($4, $5, $6)
+```
+
+А массив `values` будет таким:
+
+```javascript
+[1, 2457856, 123, 1, 2457856, 125]
+```
+
+### Результат:
+Этот код добавит 2 строки в таблицу `product_item`, где значения в каждой строке будут соответствовать объектам в массиве `productItems`.
