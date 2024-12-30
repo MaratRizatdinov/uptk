@@ -5,7 +5,7 @@ const router = new Router();
 
 router.post("/init_doc", initDocControllers.createInitDoc);
 router.get("/init_doc", initDocControllers.getInitDocAll);
-// router.get("/customer/:id", CustomerController.getOneCustomer);
+router.get("/init_doc/:id", initDocControllers.getOneInitDoc);
 // router.put("/customer", CustomerController.updateCustomer);
 // router.delete("/customer/:id", CustomerController.deleteCustomer);
 

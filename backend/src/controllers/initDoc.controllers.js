@@ -70,5 +70,25 @@ class InitDocController {
     const documents = await pool.query(`SELECT * FROM init_journal ORDER BY init_date`);
     res.json(documents.rows);
   }
+  async getOneInitDoc(req, res) {
+    const doc_id = req.params.id;
+    const document = await pool.query(
+      `select doc_id,
+                        init_product_warehouse.warehouse_id,
+                        warehouse_name,
+                        init_product_warehouse.item_id,
+                        product.product_name,
+                        product_item.product_fuse,
+                        product_item.product_code,
+                        product_count
+                        from init_product_warehouse
+                        INNER JOIN warehouse ON init_product_warehouse.warehouse_id = warehouse.warehouse_id
+                        INNER JOIN product_item ON init_product_warehouse.item_id = product_item.item_id
+                        INNER JOIN product ON product_item.product_id = product.product_id
+                        where doc_id=$1`,
+      [doc_id]
+    );
+    res.json(document.rows);
+  }
 }
 export default new InitDocController();

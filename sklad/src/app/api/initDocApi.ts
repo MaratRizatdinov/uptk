@@ -12,14 +12,14 @@ export async function getInitDocsAll() {
   return res.json();
 }
 
-// export async function getOneCustomer({ id }: { id: string }) {
-//   const res = await fetch(url + `/${id}`);
+export async function getOneDocument({ id }: { id: string }) {
+  const res = await fetch(url + `/${id}`);
 
-//   if (!res.ok) {
-//     throw new Error("Ошибка при получении данных");
-//   }
-//   return res.json();
-// }
+  if (!res.ok) {
+    throw new Error("Ошибка при получении данных");
+  }
+  return res.json();
+}
 // export async function updateCustomer(body: CustomerType) {
 //   const res = await fetch(url, {
 //     method: "PUT",

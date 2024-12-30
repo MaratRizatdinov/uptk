@@ -23,7 +23,10 @@ export default function InitDocsTable({ initDocs }: Iprops) {
       </thead>
       <tbody>
         {initDocs.map((doc) => (
-          <tr key={doc.init_doc_id} onClick={() => router.push(`/`)}>
+          <tr
+            key={doc.init_doc_id}
+            onClick={() => router.push(`/docs/init/${doc.init_doc_id}`)}
+          >
             <td>{format(doc.init_date, "dd/MM/yyyy hh:mm")}</td>
             <td>{doc.init_doc_id}</td>
             <td>{doc.init_internal_num}</td>

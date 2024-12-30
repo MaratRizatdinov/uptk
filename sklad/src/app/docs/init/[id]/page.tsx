@@ -1,3 +1,4 @@
+import { getOneDocument } from "@/app/api/initDocApi";
 import { getOneProduct } from "@/app/api/productsApi";
 import ProductInfo from "@/app/components/ProductInfo/ProductInfo";
 
@@ -8,11 +9,11 @@ type Iprops = {
 export default async function Page({ params }: Iprops) {
   try {
     const id = (await params).id;
-    const product = await getOneProduct({ id });
-    
-    return <ProductInfo product={product} />;
-  } catch(err) {
-    console.log(err)
+    const document = await getOneDocument({ id });
+    console.log(document);
+    return <h1>Одиночный документ</h1>;
+  } catch (err) {
+    console.log(err);
     return <h1>Данные отсутствую</h1>;
   }
 }
